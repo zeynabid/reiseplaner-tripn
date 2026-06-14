@@ -1,8 +1,15 @@
 package de.htw_berlin.tripn.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "packlist_items")
 public class PacklistItem {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Long tripId;
     private String name;
     private boolean checked;

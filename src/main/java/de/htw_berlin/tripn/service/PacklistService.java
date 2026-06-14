@@ -1,42 +1,41 @@
 package de.htw_berlin.tripn.service;
 
 import de.htw_berlin.tripn.model.PacklistItem;
+import de.htw_berlin.tripn.repository.PacklistRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class PacklistService {
 
-    private final List<PacklistItem> items = new ArrayList<>();
-    private final AtomicLong idCounter = new AtomicLong(1);
+    private final PacklistRepository packlistRepository;
+
+    public PacklistService(PacklistRepository packlistRepository) {
+        this.packlistRepository = packlistRepository;
+    }
 
     public List<PacklistItem> getItemsByTripId(Long tripId) {
-        return items.stream()
-                .filter(i -> i.getTripId().equals(tripId))
-                .toList();
+        return packlistRepository.findByTripId(tripId);
     }
 
     public PacklistItem createItem(PacklistItem item) {
-        item.setId(idCounter.getAndIncrement());
-        items.add(item);
-        return item;
+        return packlistRepository.save(item);
     }
 
     public Optional<PacklistItem> toggleItem(Long id) {
-        return items.stream()
-                .filter(i -> i.getId().equals(id))
-                .findFirst()
-                .map(i -> {
-                    i.setChecked(!i.isChecked());
-                    return i;
-                });
+        return packlistRepository.findById(id).map(i -> {
+            i.setChecked(!i.isChecked());
+            return packlistRepository.save(i);
+        });
     }
 
     public boolean deleteItem(Long id) {
-        return items.removeIf(i -> i.getId().equals(id));
+        if (packlistRepository.existsById(id)) {
+            packlistRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: tripn-backend
+    runtime: java
+    buildCommand: chmod +x gradlew && ./gradlew build -x test
+    startCommand: java -jar build/libs/tripn-0.0.1-SNAPSHOT.jar
+    envVars:
+      - key: PORT
+        value: 8080

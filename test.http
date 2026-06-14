@@ -1,5 +1,13 @@
-### GET request to example server
-GET https://examples.http-client.intellij.net/get
-    ?generated-in=IntelliJ IDEA
+### Alle Reisen abrufen
+GET http://localhost:8080/api/trips
 
-###
+### Neue Reise erstellen
+POST http://localhost:8080/api/trips
+Content-Type: application/json
+
+{
+  "title": "Italien Urlaub",
+  "destination": "Rom",
+  "startDate": "2025-07-01",
+  "endDate": "2025-07-14"
+}
