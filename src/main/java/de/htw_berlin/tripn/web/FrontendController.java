@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class FrontendController {
 
-    @GetMapping("/")
+    // Alle Routen die nicht /api sind → Vue Router übernimmt
+    @GetMapping(value = { "/", "/{path:[^\\.]*}", "/**/{path:[^\\.]*}" })
     public String index() {
         return "forward:/index.html";
     }
